@@ -4,22 +4,23 @@ source $HOME/bin/ssUpl.conf
 
 name="$HOME/Pictures/Shutter/"$(printf %q $(date '+%Y-%m-%d-%T'))
 
-shutter $1 -e -n -o "$name.png"
 
-if [ $2 == "-c" ]; then
+if [ $1 == "-z" ]; then
 
+    gnome-screenshot -c -f "$name.png" $2
     zip -j $name.zip $name.png
     photo="document=@$name.zip"
     method="SendDocument"
 else
 
+    gnome-screenshot -c -f "$name.png" $1
     photo="photo=@$name.png"
     method="sendPhoto"
 fi
 
 curl -v -F "chat_id=$chatId" -F $photo "https://api.telegram.org/bot$botToken/$method"
 
-if [ $2 == "-c" ]; then
+if [ $1 == "-z" ]; then
 
     rm $name.zip
 fi
