@@ -1,15 +1,12 @@
 #!/bin/bash
 
 source $HOME/bin/ssUpl.conf
-
-name="$HOME/Pictures/Shutter/"$(printf %q $(date '+%Y-%m-%d-%T'))
-
+name="$HOME/Pictures/Screenshots/"$(printf %q $(date '+%Y-%m-%d-%T'))
 
 if [ $1 == "-z" ]; then
 
     gnome-screenshot -c -f "$name.png" $2
-    zip -j $name.zip $name.png
-    photo="document=@$name.zip"
+    photo="document=@$name.png"
     method="SendDocument"
 else
 
@@ -19,8 +16,3 @@ else
 fi
 
 curl -v -F "chat_id=$chatId" -F $photo "https://api.telegram.org/bot$botToken/$method"
-
-if [ $1 == "-z" ]; then
-
-    rm $name.zip
-fi
